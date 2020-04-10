@@ -26,6 +26,34 @@ done
 
 
 ################################################ CONVERT DOCX TO MD ################################################
+
+## 
+### The clean_images & update_image_txt functions
+### are only invoked when the 
+### option to inlcude images is submitted
+function update_image_txt(){
+    cd ../
+    ### for linux
+    # sed -i 's/.tiff/.png/g' README.md
+    
+    ## for MacOSX
+    sed -i '' -e 's/.tiff/.png/g' README.md
+}
+
+function clean_images(){
+    ######### tiff is not supported in gfm format - converting to png is neccessary #########  
+    cd media/
+    
+    for f in *.tiff
+    do  
+        echo "Converting $f" 
+        convert "$f"  "$(basename "$f" .tiff).png"
+    done
+    
+    update_image_txt
+}
+
+
 function convert_docx_to_md() {
     ######### Add to .gitnore file #########
     if [ -z "$_GIT_IGNORE_ADD" ]; then
@@ -40,9 +68,12 @@ function convert_docx_to_md() {
     
     ######### extract images, if necessary #########
     if [ -z "$_IMG_INC" ]; then
-      pandoc -f docx -t gfm $_WORD_FILE -o README.md
+      pandoc -f docx -t gfm --default-image-extension=".png" $_WORD_FILE -o README.md
     else
-      pandoc -f docx -t gfm --extract-media=. $_WORD_FILE -o README.md
+      rm -rf media
+      pandoc -f docx -t gfm --extract-media=. --default-image-extension=".png" $_WORD_FILE -o README.md
+      
+      clean_images
     fi
 }
 

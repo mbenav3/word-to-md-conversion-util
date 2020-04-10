@@ -6,7 +6,12 @@
 ## Prerequisites
 
 - Pandoc - <https://pandoc.org/installing.html>
+- ImageMagick - <https://imagemagick.org/script/download.php>  
+-- For MacOSX, use [Homebrew](https://brew.sh/) and run:
 
+    brew install imagemagick  
+    brew install graphicsmagick
+ 
 
 ## Built with
 
